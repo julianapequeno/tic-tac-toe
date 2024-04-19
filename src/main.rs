@@ -9,19 +9,19 @@ fn main() {
 
     loop{
         if marcado==9{
-            println!("Deu velha");
+            println!("Parabéns, você ganhou!");
             break;
         }
         if iterations%2==0 {
-            println!("Vez do JOGADOR X!!");
             marc = 'X';
         }else{
-            println!("Vez do JOGADOR O!!");
             marc = 'O';
         }
 
-        plot_matrix(&matrix);
+        plot_matrix(&matrix);        
+        println!("Próxima jogada:");
         op = read_keyboard();
+
         if (op< 1) || (op > 9) || (op==10){
             println!("Digite um número entre 1 e 9");
         }else{
@@ -34,7 +34,7 @@ fn main() {
         }
         if ganhou(&mut matrix, op as usize, marc){
             plot_matrix(&matrix);
-            println!("{} ganhou",marc);
+            println!("Parabéns {}, você ganhou!",marc);
             break;
         }
         iterations+=1;
@@ -43,10 +43,8 @@ fn main() {
 }
 
 fn read_keyboard() -> i32{
-    println!("Digite um número:");
     let mut input = String::new();
     io::stdin().read_line(&mut input).expect("Erro ao ler entrada");
-    
     let input = input.trim();
     // Converte a string em um número
     let numero: i32 = match input.parse() {
@@ -70,12 +68,15 @@ fn update_matrix(i: usize, matrix: &mut [char], marcador: char ) -> bool {
 
 fn plot_matrix(matrix: &[char]) {
     for (i, &elemento) in matrix.iter().enumerate() {
-        print!("{} ", elemento);
+        if (i+1)%3==0 && !(i==0) {
+            print!(" {} ", elemento);
+        }else{
+            print!(" {} |", elemento);
+        }
         if (i + 1) % 3 == 0 {
-            println!();
+            print!("\n-----------\n");
         }
     }
-    println!("------");
 }
 
 fn ganhou(matrix: &[char], i:usize,op:char) -> bool{ //Shadowing
